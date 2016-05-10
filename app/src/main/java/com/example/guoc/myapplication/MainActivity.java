@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
         //初始化List<Fragment>
         mFragments = new ArrayList<>();
-        Fragment mFestivalFragment = new TestFragment();
+        Fragment mFestivalFragment = new FirstFragment();
         Fragment mRecordFragment = new TestFragment();
         Fragment myFragment = new TestFragment();
         mFragments.add(mFestivalFragment);
