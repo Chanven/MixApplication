@@ -18,4 +18,11 @@
         android:layout_height="wrap_content"
         android:textAllCaps="false"
         android:text="Server"/>
+    <Button
+        android:id="@+id/btn_view_activity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAllCaps="false"
+        android:text="to viewActivity"/>
+
 </LinearLayout>

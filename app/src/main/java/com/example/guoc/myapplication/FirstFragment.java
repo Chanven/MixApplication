@@ -26,6 +26,7 @@ public class FirstFragment extends Fragment{
     private void initView(View view) {
         view.findViewById(R.id.btn_client).setOnClickListener(mOnClickListener);
         view.findViewById(R.id.btn_server).setOnClickListener(mOnClickListener);
+        view.findViewById(R.id.btn_view_activity).setOnClickListener(mOnClickListener);
     }
 
     View.OnClickListener mOnClickListener = new View.OnClickListener() {
@@ -37,6 +38,9 @@ public class FirstFragment extends Fragment{
                     break;
                 case R.id.btn_server:
                     toActivity(MyServerActivity.class);
+                    break;
+                case R.id.btn_view_activity:
+                    toActivity(ViewActivity.class);
                     break;
                 default:
                     break;

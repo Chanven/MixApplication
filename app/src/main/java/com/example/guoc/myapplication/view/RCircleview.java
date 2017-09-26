@@ -1,4 +1,4 @@
-package com.example.guoc.myapplication;
+package com.example.guoc.myapplication.view;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -19,6 +19,9 @@ public class RCircleview extends View{
     private int height;
 
     private static final String TAG = "RCircleView";
+
+    Paint paint = new Paint();
+    RectF rectF = new RectF();
 
     public RCircleview(Context context) {
         super(context);
@@ -46,10 +49,9 @@ public class RCircleview extends View{
     @Override
     protected void onDraw(Canvas canvas) {
         Log.i(TAG, "onDraw");
-        Paint paint = new Paint();
 //        paint.setStyle(Paint.Style.STROKE);
         paint.setAntiAlias(true);
-        RectF rectF = new RectF(0,0,300,300);
+        rectF.set(0,0,300,300);
         canvas.drawArc(rectF, 0, 300, true, paint);
 
 //        paint = new Paint();
