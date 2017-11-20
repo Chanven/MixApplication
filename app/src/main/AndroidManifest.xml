@@ -20,6 +20,14 @@
         <activity android:name=".MyServerActivity"/>
         <activity android:name=".ViewActivity"/>
 
+        <service android:name="com.example.guoc.myapplication.TestService"
+            android:process=":remote"
+            android:exported="true">
+            <intent-filter>
+                <category android:name="android.intent.category.DEFAULT"/>
+            </intent-filter>
+        </service>
+
     </application>
 
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
