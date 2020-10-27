@@ -1,6 +1,7 @@
 package com.example.guoc.myapplication;
 
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,10 +18,10 @@ import java.util.concurrent.Executors;
  */
 public class DownloadUtil {
     Executor pool = Executors.newFixedThreadPool(3);
-    private DownloadListener mDownloadListener;
+    static DownloadListener mDownloadListener;
 
     public void setDownloadListener(DownloadListener listener) {
-        this.mDownloadListener = listener;
+        mDownloadListener = listener;
     }
 
     static class DownloadRunnable implements Runnable {
@@ -42,22 +43,30 @@ public class DownloadUtil {
                 URL fileUrl = new URL(url);
                 HttpURLConnection connection = (HttpURLConnection) fileUrl.openConnection();
                 connection.setRequestMethod("GET");
-                connection.setReadTimeout(5000);
+                connection.setConnectTimeout(5000); // 连接超时
+                connection.setReadTimeout(5000); // 读取超时
+                // 设置请求属性，请求制定范围的文件流
                 connection.setRequestProperty("Range=", "bytes=" + start + "-" + end);
                 RandomAccessFile accessFile = new RandomAccessFile(new File(fileName), "rwd");
+                // 移动RandomAccessFile写入位置，可从上次记录的位置开始
                 accessFile.seek(start);
-                InputStream in = connection.getInputStream();
+                connection.connect();
+                InputStream in = connection.getInputStream(); // 输入流
                 byte[] bytes = new byte[1024*4];
-                int len = 0;
+                int len; // 每次读取的数组长度
+                int complete = 0;
                 while ((len = in.read(bytes)) != -1) {
                     accessFile.write(bytes, 0, len);
+                    complete += len;
+                    int progress = (int) ((float) complete / (float) end * 100);
+                    Log.i("download--->>", progress + "%");
                 }
-                if (null != in) {
-                    in.close();
+                // 下载完成
+                if (null != mDownloadListener) {
+                    mDownloadListener.downloadFinish();
                 }
-                if (null != accessFile) {
-                    accessFile.close();
-                }
+                in.close();
+                accessFile.close();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -68,7 +77,7 @@ public class DownloadUtil {
         try {
             URL fileUrl = new URL(url);
             HttpURLConnection connection = (HttpURLConnection) fileUrl.openConnection();
-            connection.setReadTimeout(5000);
+            connection.setReadTimeout(50000);
             connection.setRequestMethod("GET");
             File file = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES), "test.jpg");
             int count = connection.getContentLength();
@@ -79,12 +88,12 @@ public class DownloadUtil {
                 if (i == 2) {
                     end = count - 1;
                 }
-                DownloadRunnable runnable = new DownloadRunnable(url,file.getAbsolutePath(), start, end);
-                pool.execute(runnable);
             }
-            if (null != mDownloadListener) {
-                mDownloadListener.downloadFinish();
-            }
+            Log.i("count ----->>", count + "");
+            // 第二种获取文件大小的方式
+            Log.i("length ---->>", connection.getHeaderField("content-length"));
+            DownloadRunnable runnable = new DownloadRunnable(url, file.getAbsolutePath(), 0, count - 1);
+            pool.execute(runnable);
         } catch (IOException e) {
             e.printStackTrace();
         }

@@ -25,7 +25,8 @@ public class TestFragment extends Fragment {
 
     private static final String TAG = "TestFragment";
 
-    private static final String ImageUrl = "http://lensbuyersguide.com/gallery/219/2/23_iso100_14mm.jpg";
+//    private static final String ImageUrl = "http://lensbuyersguide.com/gallery/219/2/23_iso100_14mm.jpg";
+    private static final String ImageUrl = "https://images.pexels.com/photos/1468527/pexels-photo-1468527.jpeg?cs=srgb&dl=agriculture-boy-child-1468527.jpg&fm=jpg";
 
     @Nullable
     @Override
